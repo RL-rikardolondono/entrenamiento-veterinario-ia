@@ -2,7 +2,7 @@
 <meta name="description" content="Entrenamiento Veterinario-IA: simulador de casos clínicos veterinarios para médicos veterinarios, zootecnistas, auxiliares y estudiantes: pequeños animales, felinos, urgencias, bovinos, equinos, porcinos, aves y exóticos. Gamificado, con casos de la semana basados en estudios reales. SkyNet Genesis.">
 <meta name="theme-color" content="#1E3A4C"><meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%231E3A4C%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%23E0A21A%27/%3E%3C/svg%3E">
-<script src="config.js?v=685390"></script>
+<script src="config.js?v=710706"></script>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icono-192.png"><meta name="apple-mobile-web-app-capable" content="yes">
 <title>Entrenamiento Veterinario-IA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1041,13 +1041,15 @@ function authMsg(e){
 }
 async function authLogin(email, clave){
   if(CFG.test){ const r=await fetch(CFG.DATA_URL+"/auth/login",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({email})}); const j=await r.json(); if(!r.ok) throw new Error(j.message); TEST_USER=j.id; sessionStorage.setItem("eci_test_user",j.id); return; }
-  const db=await neon(); const { error } = await db.auth.signIn.email({ email, password:clave });
+  try{ const d0=await neon(); await d0.auth.signOut(); }catch(e){}
+  NEON=null; const db=await neon(); const { error } = await db.auth.signIn.email({ email, password:clave });
   if(error) throw new Error(authMsg(error));
   NEON=null;   /* la conexión nueva toma el token de la sesión, no el anónimo guardado */
 }
 async function authCrear(nombre, email, clave){
   if(CFG.test){ const r=await fetch(CFG.DATA_URL+"/auth/signup",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({email,name:nombre})}); const j=await r.json(); if(!r.ok) throw new Error(j.message); TEST_USER=j.id; sessionStorage.setItem("eci_test_user",j.id); return; }
-  const db=await neon(); const { error } = await db.auth.signUp.email({ name:nombre, email, password:clave });
+  try{ const d0=await neon(); await d0.auth.signOut(); }catch(e){}   /* borra la sesión que la librería guarda en memoria (crear cuenta no la reemplaza) */
+  NEON=null; const db=await neon(); const { error } = await db.auth.signUp.email({ name:nombre, email, password:clave });
   if(error) throw new Error(authMsg(error));
   NEON=null;
 }

@@ -1,5 +1,5 @@
 // Entrenamiento Veterinario-IA: guarda la página para abrirla rápido y sin señal. Los datos siempre vienen de la base.
-const V = 'eci-685390', ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icono-192.png', './icono-512.png'];
+const V = 'eci-710706', ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icono-192.png', './icono-512.png'];
 self.addEventListener('install', e => { self.skipWaiting(); e.waitUntil(caches.open(V).then(c => c.addAll(ARCHIVOS).catch(() => {}))); });
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== V).map(x => caches.delete(x)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', e => {
