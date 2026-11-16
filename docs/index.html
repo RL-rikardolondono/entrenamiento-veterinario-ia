@@ -2,7 +2,7 @@
 <meta name="description" content="Entrenamiento Veterinario-IA: simulador de casos clínicos veterinarios para médicos veterinarios, zootecnistas, auxiliares y estudiantes: pequeños animales, felinos, urgencias, bovinos, equinos, porcinos, aves y exóticos. Gamificado, con casos de la semana basados en estudios reales. SkyNet Genesis.">
 <meta name="theme-color" content="#1E3A4C"><meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%231E3A4C%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%23E0A21A%27/%3E%3C/svg%3E">
-<script src="config.js?v=710706"></script>
+<script src="config.js?v=863946"></script>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icono-192.png"><meta name="apple-mobile-web-app-capable" content="yes">
 <title>Entrenamiento Veterinario-IA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -622,6 +622,79 @@ html,body{background:linear-gradient(180deg,#EEF5FB 0,#F4F8FB 320px) no-repeat,v
   #print table{font-size:11px}
   @page{margin:14mm}
 }
+
+/* ===== escenario clínico en tiempo real (16 nov 2026) ===== */
+.monitor.uci{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:10;background:radial-gradient(120% 140% at 20% 0%,#16293A 0%,#0A141D 60%,#070E14 100%);border:1px solid #1E3344;border-radius:16px;padding:10px 12px 12px;gap:8px;box-shadow:0 14px 34px rgba(7,14,20,.35),inset 0 0 0 1px rgba(255,255,255,.03)}
+.mon-cab{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--monTxt);letter-spacing:.4px}
+.mon-pac{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;font-weight:600}
+.led{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--monVerde);margin-right:7px;box-shadow:0 0 8px var(--monVerde);animation:led 1s steps(2) infinite}
+.led.rojo{background:var(--monRojo);box-shadow:0 0 10px var(--monRojo);animation-duration:.5s}
+@keyframes led{50%{opacity:.35}}
+.mon-est{font-family:var(--fT);font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--monVerde)}
+.mon-est.ambar{color:var(--monAmbar)} .mon-est.rojo{color:#fff;background:#D7261E;padding:2px 9px;border-radius:6px;animation:parpadeo .8s steps(2) infinite}
+@keyframes parpadeo{50%{background:#7A0F0A}}
+.mon-son{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;border-radius:8px;width:34px;height:30px;font-size:16px;cursor:pointer}
+.mon-cuerpo{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:10px;align-items:stretch}
+.mon-ondas{position:relative;display:flex;flex-direction:column;gap:2px;background:repeating-linear-gradient(0deg,transparent 0 13px,rgba(61,220,151,.06) 13px 14px),repeating-linear-gradient(90deg,transparent 0 13px,rgba(61,220,151,.06) 13px 14px);border-radius:10px;padding:4px 0}
+.mon-ondas canvas{width:100%;display:block}
+.mon-ondas .lbl{position:absolute;left:6px;font-size:10px;color:var(--monTxt);font-weight:700}
+.mon-ondas .l1{top:4px} .mon-ondas .l2{bottom:30px;color:var(--monCian)}
+.mon-nums{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;align-content:center}
+.mon-nums .n{display:flex;flex-direction:column;line-height:1}
+.mon-nums small{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--monTxt)}
+.mon-nums b{font-family:var(--fT);font-weight:600;font-size:30px;font-variant-numeric:tabular-nums;text-shadow:0 0 14px currentColor}
+.mon-nums em{font-style:normal;font-size:10px;color:var(--monTxt)}
+.mon-nums .fc b{color:var(--monVerde);font-size:40px} .mon-nums .sat b{color:var(--monCian);font-size:40px} .mon-nums .pa b{color:#F2F5F8;font-size:24px} .mon-nums .fr b{color:var(--monAmbar);font-size:24px} .mon-nums .t b{color:#fff;font-size:22px}
+.mon-nums .n.cambia b{animation:cambiaN .6s ease-out}
+@keyframes cambiaN{0%{transform:scale(1.18)}100%{transform:none}}
+.monitor.uci .estado{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--monTxt)}
+.monitor.uci.sin-cables .mon-nums b{color:#3A5163;text-shadow:none}
+.monitor.uci.riesgo{border-color:var(--monAmbar);box-shadow:0 0 0 2px rgba(246,195,68,.5),0 14px 34px rgba(7,14,20,.35)}
+.monitor.uci.alarma{border-color:#FF3B30;animation:alarmaUci .9s ease-in-out infinite}
+.monitor.uci.alarma .mon-nums .fc b,.monitor.uci.alarma .mon-nums .pa b{color:#FF5A4E;animation:parpadeoTxt .9s steps(2) infinite}
+@keyframes alarmaUci{50%{box-shadow:0 0 0 3px #FF3B30,0 0 34px rgba(255,59,48,.65)}}
+@keyframes parpadeoTxt{50%{opacity:.45}}
+.monitor.uci.muerto{animation:none;border-color:#5A0F0B;box-shadow:0 0 0 2px #5A0F0B}
+.monitor.uci.muerto .mon-nums b{color:#FF5A4E;text-shadow:0 0 10px #FF3B30;animation:none}
+@media (max-width:620px){.mon-cuerpo{grid-template-columns:1fr}.mon-nums{grid-template-columns:repeat(5,1fr)}.mon-nums .fc b,.mon-nums .sat b{font-size:28px}.mon-nums .pa b{font-size:17px}.mon-nums .fr b,.mon-nums .t b{font-size:18px}}
+/* reloj del turno */
+.reloj{font-size:22px;padding:5px 12px;background:#0A141D;color:#3DDC97;border:1px solid #1E3344;box-shadow:inset 0 0 12px rgba(61,220,151,.15);letter-spacing:1px;display:flex;align-items:baseline;gap:2px}
+.reloj .rl-t{font-size:12px;margin-right:6px;opacity:.8}
+.reloj .rl-s{font-size:15px;opacity:.75}
+.reloj.riesgo{color:#F6C344}
+@media (max-width:620px){.reloj{font-size:17px;padding:4px 8px;letter-spacing:0}.reloj .rl-s{font-size:12px}.reloj .rl-t{display:none}}
+.reloj.critico{color:#fff;background:#B3140D;border-color:#FF3B30;animation:parpadeo .8s steps(2) infinite}
+/* ambiente de la escena */
+body.esc-critico::after,body.esc-riesgo::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:40}
+body.esc-riesgo::after{box-shadow:inset 0 0 90px rgba(246,195,68,.28)}
+body.esc-critico::after{box-shadow:inset 0 0 140px rgba(255,30,20,.55);animation:vineta 1s ease-in-out infinite}
+@keyframes vineta{50%{box-shadow:inset 0 0 70px rgba(255,30,20,.25)}}
+.sacudir{animation:sacudir .5s ease-in-out}
+@keyframes sacudir{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+.alarma-ban{background:linear-gradient(135deg,#B3140D,#7A0F0A);box-shadow:0 10px 30px rgba(179,20,13,.4)}
+.alarma-ban b{font-size:22px}
+.alarma-ban .cuenta{font-size:14px;background:rgba(0,0,0,.25);border-radius:8px;padding:6px 10px;align-self:flex-start}
+.alarma-ban .cuenta b{font-size:15px;font-family:var(--fT)}
+/* muerte */
+.muerte-capa{position:fixed;inset:0;z-index:200;background:radial-gradient(circle at 50% 40%,rgba(40,4,4,.92),rgba(0,0,0,.97) 70%);display:flex;align-items:center;justify-content:center;padding:20px;animation:muerteEntra 1.6s ease-out both;overflow:auto}
+@keyframes muerteEntra{0%{background:rgba(255,30,20,.0)}12%{background:rgba(255,30,20,.35)}100%{}}
+.muerte-caja{max-width:560px;width:100%;color:#fff;text-align:center;display:flex;flex-direction:column;gap:14px;animation:muerteCaja 1.2s .9s ease-out both}
+@keyframes muerteCaja{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+.muerte-linea{width:100%;height:60px}
+.muerte-linea path{fill:none;stroke:#FF3B30;stroke-width:3;stroke-dasharray:900;stroke-dashoffset:900;animation:trazo 2.2s ease-out forwards;filter:drop-shadow(0 0 6px #FF3B30)}
+@keyframes trazo{to{stroke-dashoffset:0}}
+.muerte-eyebrow{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#FF8A80;font-weight:700}
+.muerte-caja h2{font-family:var(--fT);font-size:46px;line-height:1.02;color:#fff;margin:0;text-shadow:0 0 30px rgba(255,59,48,.45)}
+.muerte-pac{color:#C9D4DE;margin:0}
+.muerte-datos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.muerte-datos div,.muerte-salva{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;text-align:left}
+.muerte-caja small{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#9FB3C4}
+.muerte-salva{border-color:rgba(61,220,151,.35)} .muerte-salva b{color:#3DDC97} .muerte-salva span{font-size:14px;color:#C9D4DE}
+.muerte-nota{font-size:14px;color:#9FB3C4;margin:0}
+.muerte-btn{background:#fff;color:#7A0F0A;border-color:#fff;align-self:center;font-weight:700;min-width:220px}
+.res-hero.muerte{background:linear-gradient(135deg,#1A0606,#3A0B08);color:#fff;border-radius:16px;padding:16px}
+.res-hero.muerte h2{color:#FF6B5E!important} .res-hero.muerte p{color:#E9D2CF} .res-hero.muerte .anillo text{fill:#fff!important}
+@media (prefers-reduced-motion:reduce){.led,.mon-est.rojo,.monitor.uci.alarma,.reloj.critico,body.esc-critico::after,.sacudir,.muerte-capa,.muerte-caja,.muerte-linea path,.monitor.uci.alarma .mon-nums b{animation:none}.muerte-linea path{stroke-dashoffset:0}}
 </style>
 </head><body>
 
@@ -1265,7 +1338,7 @@ function nuevoTurno(c, modo){
     min:0, dano:0, preg:new Set(), exam:new Set(), orden:{}, vistos:new Set(), vitales:false,
     tRescate:null, crit:false, avisado:false, log:[{tipo:"evt", txt:c.presentacion, min:0}],
     dx:null, dif:new Set(), calc:"", plan:new Set(), confirmando:false, tab:"int", interconsultas:0,
-    marca:1, paso:0, resExa:{}, ultimo:null, masMin:0, vPrev:null, acc:[]};
+    marca:1, paso:0, resExa:{}, ultimo:null, masMin:0, vPrev:null, acc:[], tCrit:null, muerte:null};
 }
 function estabilidad(){
   const f=S.c.fisio; let e=f.base;
@@ -1295,21 +1368,14 @@ function avanzar(m){
   });
   const e=estabilidad(), f=S.c.fisio;
   if(!S.avisado && e<f.aviso && !S.crit){ S.avisado=true; S.log.push({tipo:"evt", aviso:true, txt:f.avisoTxt, min:S.min}); }
-  if(!S.crit && e<f.crit){ S.crit=true; S.log.push({tipo:"crit", txt:f.critTxt, min:S.min}); }
+  if(!S.crit && e<f.crit){ S.crit=true; S.tCrit=S.min; S.log.push({tipo:"crit", txt:f.critTxt, min:S.min}); }
+  /* muerte: crisis sin la acción inmediata durante la ventana (igual que priv.calificar en la base) */
+  if(!S.muerte && enCrisis() && S.tCrit!==null && S.min-S.tCrit>=ventanaMuerte()){ S.muerte={min:S.min}; S.log.push({tipo:"crit", txt:"Asistolia. El paciente fallece.", min:S.min}); }
 }
 
 /* ---------- pantalla del turno ---------- */
 const ECG_PATH = "M0 14 H40 L46 14 L50 4 L55 24 L59 14 H110 L116 14 L120 4 L125 24 L129 14 H180 L186 14 L190 4 L195 24 L199 14 H250 L256 14 L260 4 L265 24 L269 14 H300";
-function monitorHTML(){
-  const e=estabilidad(), f=S.c.fisio;
-  const col = e>=55?"var(--monVerde)":e>=35?"var(--monAmbar)":"var(--monRojo)";
-  const etq = enCrisis()?f.etqCrit:e>=55?"Estable":e>=35?"En riesgo":"Crítico";
-  const estado = `<div class="estado"><span style="color:var(--monTxt)">Estado</span><div class="bar"><i style="width:${e}%;background:${col}"></i></div><em style="color:${col}">${esc(etq)}</em></div>`;
-  if(!S.vitales) return `<div class="monitor" aria-label="Monitor de signos vitales"><svg class="ecg base" viewBox="0 0 300 26" preserveAspectRatio="none"><path d="M0 13 H300"/></svg><div class="mon-oculto">Monitor sin conectar. Use «${esc(S.c.examen.find(x=>x.vitales).t)}» en la pestaña ${esc(S.etq.exa)}.</div>${estado}</div>`;
-  const v=vitalesAhora(), pv=S.vPrev||v, cam=k=>pv[k]!==v[k]?" cambia":"";
-  return `<div class="monitor ${enCrisis()?"alarma":e<f.aviso?"riesgo":""}" aria-label="Monitor de signos vitales"><svg class="ecg" viewBox="0 0 300 26" preserveAspectRatio="none"><path class="traza" d="${ECG_PATH}"/><path d="${ECG_PATH}"/></svg>
-    <div class="mon-fila"><div class="vit fc ${enCrisis()?"alto":""}${cam("fc")}"><small>FC lpm</small><b>${v.fc}</b></div><div class="vit pa${cam("pas")}"><small>PA mmHg</small><b>${v.pas}/${v.pad}</b></div><div class="vit fr${cam("fr")}"><small>FR rpm</small><b>${v.fr}</b></div><div class="vit t"><small>T °C</small><b>${v.t}</b></div><div class="vit sat${cam("sat")}"><small>SpO₂ %</small><b>${v.sat}</b></div></div>${estado}</div>`;
-}
+function monitorHTML(){ return `<div id="mon-slot" class="mon-slot"></div>`; }   /* el monitor vive en escena.js */
 function msgHTML(m){
   const h=`<span class="hora">${hhmm(m.min)}</span>`;
   if(m.tipo==="pac") return `<div class="msg pac">${h}<span class="q">${esc(m.q)}</span>«${esc(m.txt)}»</div>`;
@@ -1362,7 +1428,7 @@ function panelHTML(){
 /* novedades: lo que pasó con la última acción (resultados que llegaron, avisos, alarmas) */
 function novedadesHTML(){
   const nv=S.log.slice(S.marca).filter(m=>["lab","evt","ic"].includes(m.tipo) && !m.orden);
-  const ban = enCrisis() ? `<div class="alarma-ban" role="alert"><b>⚠ ${esc(S.c.fisio.etqCrit)}</b><span>${esc(S.c.fisio.critTxt)}</span>${S.c.rescate?`<button class="btn" data-act="rescate">${esc(S.c.rescate.boton)}</button>`:""}</div>` : "";
+  const ban = enCrisis() ? `<div class="alarma-ban" role="alert"><b>⚠ PACIENTE CRÍTICO · ${esc(S.c.fisio.etqCrit)}</b><span>${esc(S.c.fisio.critTxt)}</span><span class="cuenta">Si no actúa, el paciente muere en <b id="cuenta-atras"></b></span>${S.c.rescate?`<button class="btn" data-act="rescate">${esc(S.c.rescate.boton)}</button>`:""}</div>` : "";
   if(!nv.length && !ban) return "";
   return `<div class="novedades">${ban}${nv.map(m=>{
     if(m.tipo==="evt" && m.aviso) return `<div class="aviso-ban" role="status"><b>Atención</b><span>${esc(m.txt)}</span></div>`;
@@ -1387,7 +1453,7 @@ function pintarCaso(){
     <details class="historia"><summary>Historia completa del caso (${S.log.length} registros)</summary><div class="log">${S.log.slice().reverse().map(msgHTML).join("")}</div></details>
     <div><button class="btn sec chico" data-act="abandonar">← Salir del caso</button></div>
   </div></div>`;
-  const r=document.getElementById("reloj"); if(r){ r.innerHTML=hhmm(S.min)+(S.masMin?`<span class="mas-min">+${S.masMin} min</span>`:""); }
+  escenaMontar();
   S.masMin=0; S.vPrev=S.vitales?vitalesAhora():null;
 }
 function interconsulta(){
@@ -1400,6 +1466,9 @@ function interconsulta(){
 }
 function accionCaso(act, id){
   const c=S.c, k=S.costo;
+  if(act==="sonido"){ escenaSonido(); return; }
+  if(act==="ver-muerte"){ escenaCerrarMuerte(); terminarCaso(); return; }
+  if(S.muerte) return;
   if(["preg","exa","lab","esperar","rescate","interconsulta"].includes(act)) S.marca=S.log.length;
   if(act==="tab"){ S.tab=id; S.confirmando=false; S.ultimo=null; S.marca=S.log.length; }
   else if(act==="paso"){ S.paso=+id; S.confirmando=false; }
@@ -1429,6 +1498,7 @@ function accionCaso(act, id){
   else if(act==="seguir") S.confirmando=false;
   else if(act==="fin"){ terminarCaso(); return; }
   else if(act==="abandonar"){ abrirModal(`<div class="modal-cab"><h3>¿Salir del caso?</h3></div><p>El turno no se guardará ni sumará puntos.</p><div class="row"><button class="btn peligro" data-act="salir-caso">Salir sin guardar</button><button class="btn sec" data-act="cerrar-modal">Seguir en el caso</button></div>`); return; }
+  if(S.muerte){ pintarCaso(); escenaMuerte(); return; }
   pintarCaso();
 }
 
@@ -1500,8 +1570,202 @@ function calificar(){
   fbT.push({ok:S.min<=c.tiempoMeta*2, txt:"Tiempo total del caso: "+hhmm(S.min)+" (referencia: "+c.tiempoMeta+" min)."});
   out.fb.t=fbT; out.ajuste=aj;
   out.total=Math.max(0,Math.min(S.crit?84:100, out.secs.int+out.secs.exa+out.secs.lab+out.secs.dx+out.secs.plan+aj));
+  if(S.muerte){ out.muerte=true; out.total=0; out.fb.t.unshift({mal:true, txt:"El paciente falleció a las "+hhmm(S.muerte.min)+" del turno: "+c.fisio.etqCrit.toLowerCase()+" sin tratar durante "+Math.round(S.muerte.min-S.tCrit)+" minutos"+(c.rescate?". Lo que lo habría salvado: «"+c.rescate.boton+"».":".")}); }
   return out;
 }
+/* ===================== ESCENARIO CLÍNICO EN TIEMPO REAL (16 nov 2026) =====================
+   - El tiempo del paciente corre solo: 15 segundos reales = 1 minuto del paciente (se guarda como acción ["t",n]).
+   - Monitor de cuidados intensivos con trazo de ECG y pletismografía en vivo, cifras grandes y estado.
+   - Sonidos (Web Audio): pitido por latido, alarma de riesgo, alarma de paciente crítico y línea plana.
+   - Si el paciente sigue crítico sin la acción inmediata durante la ventana (fisio.muerte, 15 min por defecto), muere. */
+const SEG_POR_MIN = 15;                 /* segundos reales por minuto del paciente */
+const VENTANA_MUERTE = 15;              /* minutos del paciente en crisis sin rescate antes de morir */
+const ventanaMuerte = () => (S && S.c && S.c.fisio && +S.c.fisio.muerte>0) ? +S.c.fisio.muerte : VENTANA_MUERTE;
+const ESC = {caso:null, timer:null, raf:null, ms:0, ult:0, mon:null, ctx:null, muted:false, beatT:0, alarmaT:0, riesgoT:0, x:0, fase:0, ultCrit:false, muerto:false};
+try{ ESC.muted = localStorage.getItem("eci_sonido")==="no"; }catch(e){}
+
+/* ---------- sonido ---------- */
+function audio(){
+  if(ESC.muted) return null;
+  try{ if(!ESC.ctx){ const A=window.AudioContext||window.webkitAudioContext; if(!A) return null; ESC.ctx=new A(); }
+       if(ESC.ctx.state==="suspended") ESC.ctx.resume(); }catch(e){ return null; }
+  return ESC.ctx;
+}
+function tono(f, dur, vol, tipo, cuando){
+  const a=audio(); if(!a) return;
+  try{ const t=a.currentTime+(cuando||0), o=a.createOscillator(), g=a.createGain();
+    o.type=tipo||"sine"; o.frequency.value=f; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.08,t+0.01);
+    g.gain.setValueAtTime(vol||0.08,t+Math.max(0.02,dur-0.03)); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+dur+0.02); }catch(e){}
+}
+const sonLatido = sat => tono(480+Math.max(0,Math.min(100,sat||97))*5, 0.06, 0.05, "sine");
+const sonCritico = () => [0,0.18,0.36,0.8,0.98].forEach(d=>tono(988,0.14,0.11,"square",d));   /* alarma de alta prioridad */
+const sonRiesgo = () => [0,0.25,0.5].forEach(d=>tono(660,0.18,0.07,"triangle",d));             /* alarma de prioridad media */
+function sonPlana(){ const a=audio(); if(!a) return; try{ const t=a.currentTime, o=a.createOscillator(), g=a.createGain(); o.type="sine"; o.frequency.value=1000;
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.09,t+0.05); g.gain.setValueAtTime(0.09,t+4.2); g.gain.exponentialRampToValueAtTime(0.0001,t+6);
+  o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+6.1); }catch(e){} }
+function escenaSonido(){
+  ESC.muted=!ESC.muted; try{ localStorage.setItem("eci_sonido", ESC.muted?"no":"si"); }catch(e){}
+  if(!ESC.muted) audio();
+  const b=document.getElementById("mon-son"); if(b){ b.textContent=ESC.muted?"🔇":"🔊"; b.setAttribute("aria-label", ESC.muted?"Activar sonido":"Silenciar"); }
+  toast(ESC.muted?"Sonido del monitor apagado.":"Sonido del monitor encendido.");
+}
+document.addEventListener("pointerdown",()=>{ if(ESC.ctx && ESC.ctx.state==="suspended" && !ESC.muted){ try{ ESC.ctx.resume(); }catch(e){} } },true);
+
+/* ---------- reloj que corre solo ---------- */
+function escenaInicio(){
+  escenaParar();
+  ESC.caso=S; ESC.ms=0; ESC.ult=performance.now(); ESC.mon=null; ESC.x=0; ESC.fase=0; ESC.beatT=0; ESC.alarmaT=0; ESC.riesgoT=0; ESC.ultCrit=false; ESC.muerto=false;
+  document.body.classList.remove("esc-critico","esc-riesgo","esc-muerte");
+  audio();
+  ESC.timer=setInterval(escenaPulso, 250);
+  ESC.raf=requestAnimationFrame(dibujar);
+}
+function escenaParar(){
+  if(ESC.timer){ clearInterval(ESC.timer); ESC.timer=null; }
+  if(ESC.raf){ cancelAnimationFrame(ESC.raf); ESC.raf=null; }
+  document.body.classList.remove("esc-critico","esc-riesgo");
+}
+const enPausa = () => document.hidden || !!document.querySelector("#capa .velo") || (S && S.confirmando);
+function escenaPulso(){
+  const ahora=performance.now(), dt=Math.min(1000, ahora-ESC.ult); ESC.ult=ahora;
+  if(!S || S!==ESC.caso || V.vista!=="caso"){ escenaParar(); document.body.classList.remove("esc-muerte"); return; }
+  if(S.muerte || ESC.muerto) return;
+  if(!enPausa()) ESC.ms+=dt;
+  if(ESC.ms >= SEG_POR_MIN*1000){ ESC.ms -= SEG_POR_MIN*1000; tic(); }
+  relojPintar(); alarmas();
+}
+function tic(){
+  const n0=S.log.length, crit0=S.crit, mas=S.masMin||0;
+  avanzar(1); S.masMin=mas;                                    /* el paso del tiempo no se muestra como «+1 min» */
+  const u=S.acc[S.acc.length-1]; if(u && u[0]==="t") u[1]=(u[1]||1)+1; else S.acc.push(["t",1]);
+  if(S.muerte){ escenaMuerte(); return; }
+  const nuevo=S.log.length>n0, foco=document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
+  if((nuevo || S.tab==="lab") && !foco){ const y=window.scrollY; pintarCaso(); try{ window.scrollTo(0,y); }catch(e){} }
+  else monActualizar();
+  if(S.crit && !crit0){ const a=document.getElementById("app"); if(a){ a.classList.remove("sacudir"); void a.offsetWidth; a.classList.add("sacudir"); } }
+}
+function relojPintar(){
+  const r=document.getElementById("reloj"); if(!r || !S) return;
+  const ss=Math.min(59, Math.floor(ESC.ms/1000*60/SEG_POR_MIN));
+  const crit=enCrisis(), resta=crit&&S.tCrit!=null ? Math.max(0, ventanaMuerte()-(S.min-S.tCrit)) : null;
+  r.classList.toggle("critico", crit); r.classList.toggle("riesgo", !crit && estabilidad()<S.c.fisio.aviso);
+  r.innerHTML=`<span class="rl-t">${S.muerte?"⏹":enPausa()?"⏸":"⏵"}</span>${hhmm(S.min)}<span class="rl-s">:${String(ss).padStart(2,"0")}</span>${S.masMin?`<span class="mas-min">+${S.masMin} min</span>`:""}`;
+  const cd=document.getElementById("cuenta-atras");
+  if(cd && resta!==null){ const seg=Math.max(0, Math.round(resta*SEG_POR_MIN - ESC.ms/1000)); cd.textContent=`${resta} min del paciente · ${Math.floor(seg/60)}:${String(seg%60).padStart(2,"0")} reales`; }
+}
+function alarmas(){
+  const ahora=performance.now(), crit=enCrisis(), riesgo=!crit && S.tRescate===null && estabilidad()<S.c.fisio.aviso;
+  document.body.classList.toggle("esc-critico", crit); document.body.classList.toggle("esc-riesgo", riesgo);
+  if(crit && !ESC.ultCrit){ ESC.alarmaT=0; }
+  ESC.ultCrit=crit;
+  if(crit && ahora-ESC.alarmaT>3200){ ESC.alarmaT=ahora; sonCritico(); }
+  else if(riesgo && ahora-ESC.riesgoT>9000){ ESC.riesgoT=ahora; sonRiesgo(); }
+}
+
+/* ---------- monitor de cuidados intensivos (un solo elemento que sobrevive a los repintados) ---------- */
+function monCrear(){
+  const P=S.c.paciente, d=document.createElement("div");
+  d.className="monitor uci"; d.setAttribute("aria-label","Monitor de signos vitales");
+  d.innerHTML=`<div class="mon-cab"><span class="mon-pac"><i class="led"></i>${esc(P.nombre)} · ${esc(P.desc)}</span><span class="mon-est" id="mon-est">—</span>
+      <button class="mon-son" id="mon-son" data-act="sonido" aria-label="${ESC.muted?"Activar sonido":"Silenciar"}">${ESC.muted?"🔇":"🔊"}</button></div>
+    <div class="mon-cuerpo"><div class="mon-ondas"><span class="lbl l1">II</span><canvas class="cv-ecg" height="70"></canvas><span class="lbl l2">Pleth</span><canvas class="cv-pl" height="40"></canvas></div>
+      <div class="mon-nums">
+        <div class="n fc"><small>FC</small><b id="n-fc">--</b><em>lpm</em></div>
+        <div class="n sat"><small>SpO₂</small><b id="n-sat">--</b><em>%</em></div>
+        <div class="n pa"><small>PA</small><b id="n-pa">--/--</b><em>mmHg</em></div>
+        <div class="n fr"><small>FR</small><b id="n-fr">--</b><em>rpm</em></div>
+        <div class="n t"><small>T</small><b id="n-t">--</b><em>°C</em></div>
+      </div></div>
+    <div class="estado"><span>Estado</span><div class="bar"><i id="mon-bar"></i></div><em id="mon-etq"></em></div>`;
+  return d;
+}
+function escenaMontar(){
+  if(!S) return;
+  if(ESC.caso!==S) escenaInicio();
+  const slot=document.getElementById("mon-slot"); if(!slot) return;
+  if(!ESC.mon) ESC.mon=monCrear();
+  slot.replaceWith(ESC.mon);
+  try{ const br=document.getElementById("barra"); const h=br?br.getBoundingClientRect().bottom:58; ESC.mon.style.top=Math.max(0,Math.round(h))+"px"; }catch(e){}
+  monActualizar(); relojPintar(); alarmas();
+}
+function monActualizar(){
+  const m=ESC.mon; if(!m || !S) return;
+  const f=S.c.fisio, e=estabilidad(), crit=enCrisis(), muerto=!!S.muerte;
+  const col = muerto?"var(--monRojo)":e>=55?"var(--monVerde)":e>=35?"var(--monAmbar)":"var(--monRojo)";
+  const etq = muerto?"Asistolia":crit?f.etqCrit:e>=55?"Estable":e>=35?"En riesgo":"Crítico";
+  m.classList.toggle("alarma", crit||muerto); m.classList.toggle("riesgo", !crit && !muerto && e<f.aviso); m.classList.toggle("muerto", muerto); m.classList.toggle("sin-cables", !S.vitales && !muerto);
+  const set=(id,v)=>{ const x=m.querySelector("#"+id); if(x && x.textContent!==String(v)){ x.textContent=v; x.parentNode.classList.remove("cambia"); void x.offsetWidth; x.parentNode.classList.add("cambia"); } };
+  if(muerto){ set("n-fc",0); set("n-sat","--"); set("n-pa","--/--"); set("n-fr",0); set("n-t","--"); }
+  else if(S.vitales){ const v=vitalesAhora(); set("n-fc",v.fc); set("n-sat",v.sat); set("n-pa",v.pas+"/"+v.pad); set("n-fr",v.fr); set("n-t",v.t); }
+  m.querySelector("#mon-bar").style.cssText=`width:${muerto?0:e}%;background:${col}`;
+  const et=m.querySelector("#mon-etq"); et.textContent=etq; et.style.color=col;
+  const es=m.querySelector("#mon-est"); es.textContent=muerto?"PACIENTE FALLECIDO":crit?"⚠ PACIENTE CRÍTICO":e<f.aviso&&S.tRescate===null?"Atención":S.tRescate!==null?"Respondiendo al manejo":S.vitales?"Monitorizado":"Sin monitorizar"; es.className="mon-est"+(muerto||crit?" rojo":e<f.aviso&&S.tRescate===null?" ambar":"");
+  m.querySelector(".mon-pac .led").className="led"+(muerto||crit?" rojo":"");
+}
+
+/* ---------- trazos en vivo (barrido como un monitor real) ---------- */
+function ondaECG(p){   /* p: fase 0..1 dentro del latido */
+  const g=(c,w,a)=>a*Math.exp(-Math.pow((p-c)/w,2));
+  return g(0.16,0.035,0.12) - g(0.29,0.012,0.12) + g(0.31,0.014,1) - g(0.335,0.014,0.28) + g(0.58,0.06,0.25);
+}
+const ondaPleth = p => { const q=(p+0.85)%1; return Math.max(0, Math.sin(Math.PI*Math.min(1,q/0.45))*(q<0.45?1:0)) + (q>0.45 && q<0.9 ? 0.35*Math.sin(Math.PI*(q-0.45)/0.45) : 0); };
+function dibujar(t){
+  ESC.raf=requestAnimationFrame(dibujar);
+  const m=ESC.mon; if(!m || !S || !m.isConnected) return;
+  const ce=m.querySelector(".cv-ecg"), cp=m.querySelector(".cv-pl"); if(!ce||!cp) return;
+  const W=Math.max(120, Math.round(ce.clientWidth||300));
+  if(ce.width!==W){ ce.width=W; cp.width=W; ESC.x=0; }
+  const dt=Math.min(0.1, (t-(ESC.tAnt||t))/1000); ESC.tAnt=t;
+  const muerto=!!S.muerte, sinCables=!S.vitales && !muerto;
+  const v=muerto||sinCables?null:vitalesAhora(), fc=v?Math.max(20,Math.min(260,v.fc)):0, crit=enCrisis();
+  const vel=110, pasos=Math.max(1,Math.round(vel*dt));
+  const xe=ce.getContext("2d"), xp=cp.getContext("2d"), He=ce.height, Hp=cp.height;
+  const colE = muerto?"#FF5A4E":crit?"#FF7A6B":"#3DDC97", colP="#8EE6FF";
+  for(let i=0;i<pasos;i++){
+    const x=ESC.x, x0=(x-1+W)%W;
+    xe.clearRect(x,0,10,He); xp.clearRect(x,0,10,Hp); if(x+10>W){ xe.clearRect(0,0,x+10-W,He); xp.clearRect(0,0,x+10-W,Hp); }
+    let ye, yp;
+    if(muerto || sinCables){ ye=He*0.55+(muerto?Math.sin(t/90+x)*0.6:0); yp=Hp*0.8; }
+    else {
+      const fasePrev=ESC.fase; ESC.fase+= (fc/60)/vel;
+      if(ESC.fase>=1){ ESC.fase-=1; }
+      if(fasePrev<0.31 && ESC.fase>=0.31 && !ESC.muted && performance.now()-ESC.beatT>150){ ESC.beatT=performance.now(); sonLatido(v.sat); }
+      const amp = crit?0.32:0.4;
+      ye = He*0.62 - ondaECG(ESC.fase)*He*amp*(crit?1+0.15*Math.sin(t/300):1) + (crit?Math.sin(t/37+x)*1.4:0);
+      yp = Hp*0.85 - ondaPleth(ESC.fase)*Hp*(crit?0.35:0.65);
+    }
+    xe.strokeStyle=colE; xe.lineWidth=2; xe.beginPath(); xe.moveTo(x0===W-1?x:x0, ESC.yE==null?ye:ESC.yE); xe.lineTo(x,ye); xe.stroke();
+    xp.strokeStyle=colP; xp.lineWidth=1.6; xp.beginPath(); xp.moveTo(x0===W-1?x:x0, ESC.yP==null?yp:ESC.yP); xp.lineTo(x,yp); xp.stroke();
+    ESC.yE=ye; ESC.yP=yp; ESC.x=(x+1)%W;
+  }
+}
+
+/* ---------- muerte del paciente ---------- */
+function escenaMuerte(){
+  if(ESC.muerto) return; ESC.muerto=true;
+  if(ESC.timer){ clearInterval(ESC.timer); ESC.timer=null; }
+  document.body.classList.remove("esc-critico","esc-riesgo"); document.body.classList.add("esc-muerte");
+  monActualizar(); relojPintar(); sonPlana();
+  const c=S.c, P=c.paciente, f=c.fisio, r=c.rescate, hora=hhmm(S.muerte.min);
+  const capa=document.createElement("div"); capa.className="muerte-capa"; capa.id="muerte-capa"; capa.setAttribute("role","alertdialog"); capa.setAttribute("aria-modal","true"); capa.setAttribute("aria-labelledby","muerte-t");
+  capa.innerHTML=`<div class="muerte-caja">
+    <svg class="muerte-linea" viewBox="0 0 600 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 34 H150 L160 34 L168 10 L176 52 L184 34 H260 L268 30 L276 34 H600"/></svg>
+    <span class="muerte-eyebrow">Asistolia · ${hora} del turno</span>
+    <h2 id="muerte-t">Su paciente ha fallecido</h2>
+    <p class="muerte-pac">${esc(P.nombre)} · ${esc(P.desc)}</p>
+    <div class="muerte-datos">
+      <div><small>Causa</small><b>${esc(f.etqCrit)} sin tratar</b></div>
+      <div><small>Tiempo en crisis</small><b>${Math.max(0,Math.round(S.muerte.min-S.tCrit))} minutos</b></div>
+    </div>
+    ${r?`<div class="muerte-salva"><small>Lo que lo habría salvado</small><b>${esc(r.boton)}</b><span>${esc(r.ayuda)}</span></div>`:""}
+    <p class="muerte-nota">En la vida real no hay segunda oportunidad. Aquí sí: revise qué pasó y vuelva a intentarlo.</p>
+    <button class="btn muerte-btn" data-act="ver-muerte">Ver qué pasó</button>
+  </div>`;
+  document.body.appendChild(capa);
+  setTimeout(()=>{ const b=capa.querySelector(".muerte-btn"); if(b) b.focus(); }, 2600);
+}
+function escenaCerrarMuerte(){ const c=document.getElementById("muerte-capa"); if(c) c.remove(); document.body.classList.remove("esc-muerte"); }
 /* ===================== Entrenamiento Veterinario-IA · BASE DE PANTALLAS ===================== */
 let V = {vista:"portada", p:{}};
 let menuAbierto=false, latAbierto=false;
@@ -1594,7 +1858,7 @@ function vPortada(){
   <section class="hero">
     <div class="stack">
       <span class="eyebrow">Simulador de casos clínicos veterinarios · Pequeños animales, producción y exóticos</span>
-      <h1>Entrene con pacientes que empeoran si usted se demora.</h1>
+      <h1>Entrene con pacientes tan reales que entran en crisis si usted duda.</h1>
       <p class="lead">Atienda casos veterinarios como en un turno real o en la finca: pregunte al tutor, examine, pida exámenes, calcule dosis por especie y decida. El paciente evoluciona minuto a minuto. Al final recibe su puntaje, la comparación con el experto y su constancia.</p>
       <div class="row"><button class="btn verde" data-act="ficha" data-id="${cs.id}">Atender el caso de la semana gratis</button><button class="btn sec" data-act="demo">Probar la demostración</button></div>
       <p class="small muted">${totalCasos()} casos en ${lanz.length} especialidades · módulos de 15 casos por nivel · nuevos módulos cada mes · en español, con normas del ICA y consensos WSAVA, ACVIM e ISFM.</p>
@@ -1617,8 +1881,8 @@ function vPortada(){
     <div class="card stack"><span class="eyebrow">Para instituciones</span><h3>Capacitación permanente de su personal, medible</h3>
       <ul class="small" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px"><li>Asigne casos con fecha límite y vea quién cumplió.</li><li>Informe de capacitación por persona y servicio, como evidencia de capacitación de su equipo ante auditorías y clientes.</li><li>Módulos según los servicios que presta su clínica, hospital o empresa.</li><li>Nivel de desempeño de su equipo, de Bronce a Diamante.</li></ul>
       <div class="row"><button class="btn" data-act="nav" data-v="registro-inst">Registrar mi institución: 15 días gratis</button></div></div>
-    <div class="card stack"><span class="eyebrow">Con institución aliada</span><h3>Cursos de educación continua por especialidad</h3>
-      <p class="small">Cada módulo de 15 casos puede cursarse como curso de educación continua con constancia de una institución aliada. Ideal para auxiliares de veterinaria y para la actualización profesional de médicos veterinarios y zootecnistas.</p>
+    <div class="card stack"><span class="eyebrow">Con POLIANDES</span><h3>Cursos de educación continua por especialidad</h3>
+      <p class="small">Cada módulo de 15 casos puede cursarse como curso de educación continua con constancia de POLIANDES, Politécnico Industrial de Los Andes. Ideal para auxiliares de veterinaria y para la actualización profesional de médicos veterinarios y zootecnistas.</p>
       <p class="small muted">Certificado por módulo aprobado: ${pesos(P.certPoliandes)}.</p></div>
   </section>
   <section class="stack"><h2>Gane, suba y destáquese</h2>
@@ -1658,7 +1922,7 @@ function vPrecios(){
       <p class="small"><b>Además:</b> activación única de cada módulo para toda la institución: ${pesos(P.activacion)}. La mensualidad se paga cada mes; los módulos se pagan una sola vez.</p>
       <div class="row"><button class="btn verde" data-act="nav" data-v="registro-inst">Registrar mi institución: 15 días gratis</button><a class="btn sec" href="${waLink("Hola, quiero una cotización de Entrenamiento Veterinario-IA para mi institución")}" target="_blank" rel="noopener">Hablar con un asesor</a></div>
     </section>
-    <section class="card stack"><h3>Certificado de educación continua con una institución aliada</h3><p class="small">Al aprobar los ${CASOS_POR_MODULO} casos de un módulo puede solicitar el certificado del curso, expedido por una institución aliada (educación informal). Valor: ${pesos(P.certPoliandes)} por módulo.</p></section>
+    <section class="card stack"><h3>Certificado de educación continua con POLIANDES</h3><p class="small">Al aprobar los ${CASOS_POR_MODULO} casos de un módulo puede solicitar el certificado del curso, expedido por POLIANDES (educación informal). Valor: ${pesos(P.certPoliandes)} por módulo.</p></section>
     ${pie()}</div></div>`;
 }
 function vHonor(){
@@ -1835,7 +2099,7 @@ function vModulo(){
       return `<article class="caso-card ${est} ${ok?"":"bloq"}"><div class="row between" style="flex-wrap:nowrap"><span class="caso-num">${i+1}</span><span class="ent-chip">${esc(c.entorno)}</span>${x?`<span class="caso-pts">${x.puntaje>=85?"★ ":""}${x.puntaje}</span>`:""}</div>
         <b class="caso-tit">${esc(c.titulo)}</b><span class="small muted">${esc(c.duracion)}${!a.ok&&prueba.includes(c.id)&&enPrueba(u)?" · incluido en la prueba":""}</span>
         <button class="btn ${x?"sec":"verde"} chico" data-act="ficha" data-id="${c.id}" ${ok?"":"disabled"}>${!ok?"🔒 Bloqueado":x?(x.puntaje>=APRUEBA?"Repetir":"Mejorar puntaje"):"▶ Atender"}</button></article>`}).join("")}</div>
-    <div class="info small">Al aprobar los ${pr.total} casos obtiene la constancia del módulo (${horasTxt(pr.total*HORAS_CASO)}) y puede solicitar el certificado de educación continua de una institución aliada.</div>
+    <div class="info small">Al aprobar los ${pr.total} casos obtiene la constancia del módulo (${horasTxt(pr.total*HORAS_CASO)}) y puede solicitar el certificado de educación continua de POLIANDES.</div>
   </div></div>`;
 }
 function vSemana(){ const c=casoSemana(); V.p.id=c.id; vFicha(); }
@@ -1871,7 +2135,7 @@ function vConstancias(){
   const u=sesion(), b=Object.values(mejores(u.id)).filter(i=>i.puntaje>=APRUEBA).sort((x,y)=>y.fecha.localeCompare(x.fecha));
   const comp=modulosDisponibles().filter(m=>progresoModulo(u.id,m.id).completo);
   $app().innerHTML=`<div class="wrap"><div class="stack" style="gap:20px"><h1>Constancias</h1>
-    <section class="stack"><h2>Módulos completos</h2>${comp.length?comp.map(m=>`<div class="card row between"><div><b>${esc(m.nombre)}</b><div class="small muted">${m.casos.length} casos · ${num(m.casos.length*HORAS_CASO)} horas</div></div><div class="row"><button class="btn sec chico" data-act="const-mod" data-id="${m.id}">Ver constancia</button><button class="btn verde chico" data-act="agregar-cert" data-id="${m.id}">Certificado de educación continua · ${pesos(DB.config.precios.certPoliandes)}</button></div></div>`).join(""):`<p class="muted">Apruebe los ${CASOS_POR_MODULO} casos de un módulo para recibir la constancia del módulo y poder solicitar el certificado de una institución aliada.</p>`}</section>
+    <section class="stack"><h2>Módulos completos</h2>${comp.length?comp.map(m=>`<div class="card row between"><div><b>${esc(m.nombre)}</b><div class="small muted">${m.casos.length} casos · ${num(m.casos.length*HORAS_CASO)} horas</div></div><div class="row"><button class="btn sec chico" data-act="const-mod" data-id="${m.id}">Ver constancia</button><button class="btn verde chico" data-act="agregar-cert" data-id="${m.id}">Certificado POLIANDES · ${pesos(DB.config.precios.certPoliandes)}</button></div></div>`).join(""):`<p class="muted">Apruebe los ${CASOS_POR_MODULO} casos de un módulo para recibir la constancia del módulo y poder solicitar el certificado de POLIANDES.</p>`}</section>
     <section class="stack"><h2>Casos aprobados</h2>${b.length?`<div class="card pad0 tabla-wrap"><table><thead><tr><th>Fecha</th><th>Caso</th><th>Puntaje</th><th></th></tr></thead><tbody>${b.map(i=>{const c=caso(i.casoId);return c?`<tr><td class="num">${fechaCorta(i.fecha)}</td><td>${esc(c.titulo)}<div class="small muted">${esc(esp(c.esp).n)}</div></td><td class="num"><b>${i.puntaje}</b></td><td><button class="btn sec chico" data-act="const-caso" data-id="${i.id}">Ver</button></td></tr>`:""}).join("")}</tbody></table></div>`:`<p class="muted">Aún no ha aprobado casos.</p>`}</section>
   </div></div>`;
 }
@@ -1931,20 +2195,20 @@ function autoevalHTML(){
 function vResultado(){
   if(!ULTIMO){ ir(casa(sesion())); return; }
   const {R,c,modo}=ULTIMO, u=sesion();
-  const nivel=R.total>=85?"¡Excelente!":R.total>=APRUEBA?"Aprobado":R.total>=50?"Por mejorar":"No aprobado";
-  const frase=R.total>=85?"Manejo de experto. Su paciente se lo agradece.":R.total>=APRUEBA?"Buen turno. Mire lo que le faltó para llegar a excelente.":R.total>=50?"Va por buen camino. Repase lo que faltó y repita el caso.":"Este paciente necesitaba más. Repase y vuelva a intentarlo.";
+  const nivel=R.muerte?"Paciente fallecido":R.total>=85?"¡Excelente!":R.total>=APRUEBA?"Aprobado":R.total>=50?"Por mejorar":"No aprobado";
+  const frase=R.muerte?"Su paciente murió por "+c.fisio.etqCrit.toLowerCase()+" sin la acción inmediata. Revise qué faltó y repita el caso.":R.total>=85?"Manejo de experto. Su paciente se lo agradece.":R.total>=APRUEBA?"Buen turno. Mire lo que le faltó para llegar a excelente.":R.total>=50?"Va por buen camino. Repase lo que faltó y repita el caso.":"Este paciente necesitaba más. Repase y vuelva a intentarlo.";
   const col=R.total>=APRUEBA?"#14A38B":R.total>=50?"#B7791F":"#C0392B", C=2*Math.PI*46, off=C*(1-R.total/100);
   const subio=ULTIMO.catDespues && ORDEN_CAT[ULTIMO.catDespues]>ORDEN_CAT[ULTIMO.catAntes];
   const E=c.etiquetas||{}, lab=E.lab||"Exámenes";
   const secs=[[E.int||"Interrogatorio",R.secs.int],[E.exa||"Examen físico",R.secs.exa],[lab,R.secs.lab],[c.dxTitulo||"Diagnóstico",R.secs.dx],["Plan"+(c.calculo?" y cálculo":""),R.secs.plan]];
   const todos=[].concat(R.fb.dx,R.fb.plan,R.fb.int,R.fb.exa,R.fb.lab,R.fb.t);
   const corto=t=>{ t=String(t); const k=t.indexOf(". "); return k>0&&k<150?t.slice(0,k+1):(t.length>160?t.slice(0,157)+"…":t); };
-  const bien=todos.filter(x=>x.ok).slice(0,3), falta=todos.filter(x=>x.mal).concat(todos.filter(x=>!x.ok&&!x.mal&&x.ok===false)).slice(0,3);
+  const bien=todos.filter(x=>x.ok).slice(0,3), falta=(R.muerte?[R.fb.t[0]]:[]).concat(todos.filter(x=>x.mal&&!(R.muerte&&x===R.fb.t[0]))).concat(todos.filter(x=>!x.ok&&!x.mal&&x.ok===false)).slice(0,3);
   const regi=(modo==="practica"||modo==="examen");
   $app().innerHTML=`<div class="wrap estrecho"><div class="stack">
     <span class="eyebrow">Caso terminado · ${c.semana?"Caso de la semana":esc(esp(c.esp).n)} · ${modo==="examen"?"Modo examen":"Modo práctica"}</span><h1 style="font-size:30px">${esc(c.titulo)}</h1>
-    <div class="res-hero"><svg class="anillo" viewBox="0 0 110 110" role="img" aria-label="Puntaje ${R.total} de 100"><circle cx="55" cy="55" r="46" fill="none" stroke="#E8F1FA" stroke-width="10"/><circle class="arco" style="--C:${C}" cx="55" cy="55" r="46" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${off}" transform="rotate(-90 55 55)"/><text x="55" y="60" text-anchor="middle" font-size="32" fill="#1C2B39">${R.total}</text><text x="55" y="78" text-anchor="middle" font-size="12" fill="#5D6B78">de 100</text></svg>
-      <div style="min-width:0;flex:1" class="stack s8"><h2 style="color:${col}">${nivel}</h2><p>${frase}</p><p class="small muted">⏱ ${hhmm(ULTIMO.min)} · ${ULTIMO.crisis?"⚠ El paciente se complicó ("+esc(c.fisio.etqCrit.toLowerCase())+")":"✓ El paciente no se complicó"}</p></div></div>
+    <div class="res-hero${R.muerte?" muerte":""}"><svg class="anillo" viewBox="0 0 110 110" role="img" aria-label="Puntaje ${R.total} de 100"><circle cx="55" cy="55" r="46" fill="none" stroke="#E8F1FA" stroke-width="10"/><circle class="arco" style="--C:${C}" cx="55" cy="55" r="46" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${off}" transform="rotate(-90 55 55)"/><text x="55" y="60" text-anchor="middle" font-size="32" fill="#1C2B39">${R.total}</text><text x="55" y="78" text-anchor="middle" font-size="12" fill="#5D6B78">de 100</text></svg>
+      <div style="min-width:0;flex:1" class="stack s8"><h2 style="color:${col}">${nivel}</h2><p>${frase}</p><p class="small muted">⏱ ${hhmm(ULTIMO.min)} · ${R.muerte?"✖ El paciente falleció":ULTIMO.crisis?"⚠ El paciente se complicó ("+esc(c.fisio.etqCrit.toLowerCase())+")":"✓ El paciente no se complicó"}</p></div></div>
     ${regi?`<div class="logro">${medalla(ULTIMO.catDespues,56)}<div style="flex:1;min-width:0"><div class="grande num">+${ULTIMO.ganados} puntos · +${ULTIMO.gemas} ${GEMA}</div><p>${subio?"¡Subió a categoría <b>"+cat(ULTIMO.catDespues).n+"</b>!":"Categoría <b>"+cat(ULTIMO.catDespues).n+"</b> · "+ULTIMO.puntos+" puntos"}${ULTIMO.nuevas.length?" · Nueva insignia: "+ULTIMO.nuevas.map(i=>"<b>"+esc(i.n)+"</b>").join(", "):""}</p></div></div>`
     :modo==="invitado"?`<div class="info row between"><span>Este puntaje no se guardó. Cree su cuenta gratis para sumar puntos y gemas.</span><button class="btn verde chico" data-act="nav" data-v="registro">Crear cuenta gratis</button></div>`:`<div class="info small">Vista previa del Superadministrador: el intento no se registró.</div>`}
     <div class="card barras">${secs.map(([t,v])=>`<div class="barra-s"><span>${esc(t)}</span><div class="bb"><i style="width:${v*5}%;background:${v>=16?"var(--verde)":v>=10?"var(--oro)":"var(--rojo)"}"></i></div><b>${v}</b></div>`).join("")}<div class="barra-s"><span>Tiempo y evolución</span><span class="small muted">${R.ajuste>0?"Actuó a tiempo":R.ajuste<0?"Paciente complicado":"Sin bono"}</span><b style="color:${R.ajuste>=0?"var(--verdeOsc)":"var(--rojo)"}">${R.ajuste>0?"+":""}${R.ajuste}</b></div></div>
@@ -2004,7 +2268,7 @@ function vMarketPersona(){
       ${modulosDe(e.id).map(M=>{ if(!M.disponible) return ""; const a2=accesoModulo(u,M.id), k="mod:"+M.id;
         return `<div class="row between"><span class="small"><b>Nivel ${M.nivel}</b> · ${M.casos.length} casos</span>${a2.ok&&a2.via==="institucion"?`<span class="chip v">Incluido por su institución</span>`:enCarrito(k)?`<button class="btn sec chico" data-act="quitar" data-id="${k}">En su pedido · quitar</button>`:`<button class="btn verde chico" data-act="agregar" data-id="${M.id}">${a2.ok?"Renovar":"Agregar"} · ${pesos(precioModulo(u))}</button>`}</div>${a2.ok&&a2.via==="compra"?`<span class="small muted">Activo hasta ${fechaCorta(a2.hasta)}</span>`:""}`;}).join("")}
     </article>`).join("")}</div></section>`).join("")}
-    <section class="card stack"><h3>Certificados de educación continua con una institución aliada</h3><p class="small">Disponibles cuando aprueba los ${CASOS_POR_MODULO} casos de un módulo (se solicitan desde «Constancias»). Valor: ${pesos(DB.config.precios.certPoliandes)} por módulo.</p></section>
+    <section class="card stack"><h3>Certificados de educación continua con POLIANDES</h3><p class="small">Disponibles cuando aprueba los ${CASOS_POR_MODULO} casos de un módulo (se solicitan desde «Constancias»). Valor: ${pesos(DB.config.precios.certPoliandes)} por módulo.</p></section>
     </div><div id="pedido">${pedidoHTML()}</div></div>
     ${barraPedido()}</div></div>`;
 }
@@ -2046,7 +2310,7 @@ function aplicarPedido(){
   c.forEach(i=>{
     const [t,id]=i.k.split(":");
     if(t==="mod"){ const ac=compraDe(u.id,id); const base=ac&&ac.hasta>hoy()?ac.hasta:hoy(); DB.compras.push({id:uid("c"), usuarioId:u.id, modulo:id, hasta:sumarMeses(base,12)}); }
-    if(t==="cert"){ DB.certs.push({id:uid("ce"), usuarioId:u.id, modulo:id, fecha:hoy(), estado:"solicitado"}); avisar(u.id,"Su certificado de una institución aliada de "+modulo(id).nombre+" quedó solicitado. Llegará a su correo en 5 días hábiles."); avisar("superadmin","Nuevo certificado de educación continua solicitado por "+u.nombre+" ("+modulo(id).nombre+")."); }
+    if(t==="cert"){ DB.certs.push({id:uid("ce"), usuarioId:u.id, modulo:id, fecha:hoy(), estado:"solicitado"}); avisar(u.id,"Su certificado de POLIANDES de "+modulo(id).nombre+" quedó solicitado. Llegará a su correo en 5 días hábiles."); avisar("superadmin","Nuevo certificado POLIANDES solicitado por "+u.nombre+" ("+modulo(id).nombre+")."); }
     const en=u.entidadId?entidad(u.entidadId):null;
     if(t==="plan"||i.k==="mes"){ if(t==="plan") en.cupos=ajustarCupos(id); const base=en.pagadoHasta&&en.pagadoHasta>=hoy()?sumarDias(en.pagadoHasta,1):hoy(); en.pagadoHasta=finDeMes(base); }
     if(t==="act"){ if(!en.modulos.includes(id)) en.modulos.push(id); }
@@ -2162,7 +2426,7 @@ function vAdmin(){
   $app().innerHTML=`<div class="wrap"><div class="stack" style="gap:20px">${cabAdm("Resumen")}
     <div class="grid3" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">${t("Ingresos del mes",pesos(ingM))}${t("Ingresos "+anio,pesos(ingA),pg.length+" pagos Bold")}${t("Personas",pers.length,DB.compras.length+" módulos vendidos")}${t("Instituciones",DB.entidades.length,est.filter(x=>x==="activa").length+" activas · "+est.filter(x=>x==="prueba").length+" en prueba · "+est.filter(x=>x==="cerrada").length+" cerradas")}${t("Casos atendidos",DB.intentos.length,"promedio "+(DB.intentos.length?Math.round(DB.intentos.reduce((a,i)=>a+i.puntaje,0)/DB.intentos.length):0))}${t("Casos en catálogo",todosLosCasos().filter(casoActivo).length,modulosDisponibles().length+" módulos")}</div>
     <div class="card pad0 tabla-wrap"><table><thead><tr><th>Especialidad</th><th>Nivel 1</th><th>Nivel 2</th><th>Nivel 3</th><th>Intentos</th><th>Promedio</th></tr></thead><tbody>${ESPECIALIDADES.map(e=>{const it=DB.intentos.filter(i=>i.esp===e.id);return `<tr><td>${esc(e.n)}${e.pronto?' <span class="chip g">En preparación</span>':""}</td>${[1,2,3].map(n=>`<td class="num">${casosDeModulo(modId(e.id,n)).length}/${CASOS_POR_MODULO}</td>`).join("")}<td class="num">${it.length}</td><td class="num">${it.length?Math.round(it.reduce((a,i)=>a+i.puntaje,0)/it.length):"—"}</td></tr>`}).join("")}</tbody></table></div>
-    ${DB.certs.length?`<div class="card stack"><h3>Certificados de educación continua solicitados</h3>${DB.certs.map(c=>`<div class="row between small"><span>${esc((usuario(c.usuarioId)||{}).nombre)} · ${esc(modulo(c.modulo).nombre)} · ${fechaCorta(c.fecha)}</span><span class="chip ${c.estado==="enviado"?"v":"am"}">${c.estado==="enviado"?"Enviado":"Por enviar"}</span>${c.estado!=="enviado"?`<button class="btn sec chico" data-act="cert-enviado" data-id="${c.id}">Marcar enviado</button>`:""}</div>`).join("")}</div>`:""}
+    ${DB.certs.length?`<div class="card stack"><h3>Certificados POLIANDES solicitados</h3>${DB.certs.map(c=>`<div class="row between small"><span>${esc((usuario(c.usuarioId)||{}).nombre)} · ${esc(modulo(c.modulo).nombre)} · ${fechaCorta(c.fecha)}</span><span class="chip ${c.estado==="enviado"?"v":"am"}">${c.estado==="enviado"?"Enviado":"Por enviar"}</span>${c.estado!=="enviado"?`<button class="btn sec chico" data-act="cert-enviado" data-id="${c.id}">Marcar enviado</button>`:""}</div>`).join("")}</div>`:""}
   </div></div>`;
 }
 function vAdmPersonas(){
@@ -2207,7 +2471,7 @@ function vAdmPrecios(){
   const P=DB.config.precios;
   $app().innerHTML=`<div class="wrap estrecho"><div class="stack" style="gap:18px">${cabAdm("Precios y ajustes")}
     <form class="card stack" data-form="precios" novalidate><h3>Personas</h3><div class="grid3">
-      <label class="campo" for="pr-mod">Módulo (12 meses)<input type="number" id="pr-mod" value="${P.modulo}" step="1000" min="0"></label><label class="campo" for="pr-desc">Descuento estudiante (%)<input type="number" id="pr-desc" value="${P.descEstudiante}" min="0" max="90"></label><label class="campo" for="pr-cert">Certificado de educación continua<input type="number" id="pr-cert" value="${P.certPoliandes}" step="1000" min="0"></label></div>
+      <label class="campo" for="pr-mod">Módulo (12 meses)<input type="number" id="pr-mod" value="${P.modulo}" step="1000" min="0"></label><label class="campo" for="pr-desc">Descuento estudiante (%)<input type="number" id="pr-desc" value="${P.descEstudiante}" min="0" max="90"></label><label class="campo" for="pr-cert">Certificado POLIANDES<input type="number" id="pr-cert" value="${P.certPoliandes}" step="1000" min="0"></label></div>
       <h3>Instituciones: valor por persona al mes</h3><label class="campo" for="pr-min" style="max-width:240px">Mínimo de personas<input type="number" id="pr-min" value="${P.minUsuarios}" min="1"></label><div class="grid2">${P.tramos.map((t,i)=>`<label class="campo" for="pr-p${i}">Tramo hasta <input type="number" id="pr-h${i}" value="${t.hasta}" min="1" style="width:80px;display:inline-block"> personas · valor por persona<input type="number" id="pr-p${i}" value="${t.pp}" step="100" min="0"></label>`).join("")}</div>
       <div class="grid2"><label class="campo" for="pr-act">Activación de cada módulo (pago único)<input type="number" id="pr-act" value="${P.activacion}" step="1000" min="0"></label></div>
       <label class="campo" for="pr-lote">Próximo lote de módulos<input type="text" id="pr-lote" value="${esc(DB.config.proximoLote)}"></label>
@@ -5417,7 +5681,7 @@ const correoOk = c => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c);
 const codigoNuevo = p => (p||"ECI")+"-"+String(Math.floor(1000+Math.random()*9000));
 function guardarYRender(msg){ guardarDB(); render(); if(msg) toast(msg); }
 function entrar(u){ DB.sesion=u.id; const m=registrarEntrada(u); guardarDB(); ir(casa(u)); if(m) toast(m); }
-const CASO_ACTS=["tab","paso","preg","exa","lab","esperar","rescate","interconsulta","terminar","seguir","fin","abandonar"];
+const CASO_ACTS=["tab","paso","preg","exa","lab","esperar","rescate","interconsulta","terminar","seguir","fin","abandonar","sonido","ver-muerte"];
 
 document.addEventListener("click", ev=>{
   const b=ev.target.closest("[data-act]"); if(!b) return;
@@ -5443,7 +5707,7 @@ document.addEventListener("click", ev=>{
     case "iniciar": iniciarCaso(id, b.dataset.modo); return;
     case "ver-mod": ir("modulo",{mod:id}); return;
     case "agregar": if(!u){ ir("registro"); return; } agregarItem(itemModulo(u,id)); toast("Agregado a su pedido."); if(V.vista!=="market") ir("market"); else render(); return;
-    case "agregar-cert": agregarItem({k:"cert:"+id, concepto:"Certificado de educación continua · "+modulo(id).nombre, valor:DB.config.precios.certPoliandes, pago:"unico"}); toast("Certificado agregado a su pedido."); ir("market"); return;
+    case "agregar-cert": agregarItem({k:"cert:"+id, concepto:"Certificado POLIANDES · "+modulo(id).nombre, valor:DB.config.precios.certPoliandes, pago:"unico"}); toast("Certificado agregado a su pedido."); ir("market"); return;
     case "agregar-plan": { const en=entidad(u.entidadId), n=ajustarCupos(val("plan-n")); if(n<miembros(en.id).length){ toast("Su equipo ya tiene "+miembros(en.id).length+" personas: escoja al menos ese número."); return; } agregarItem({k:"plan:"+n, concepto:"Plan de "+n+" personas · mensualidad", valor:mensualidad(n), pago:"mensual"}); render(); return; }
     case "agregar-mes": case "pagar-mes-inst": { const en=entidad(u.entidadId), p=planDe(en); agregarItem({k:"mes", concepto:"Plan de "+p.n+" · mensualidad", valor:p.mes, pago:"mensual"}); if(V.vista!=="market") ir("market"); else render(); return; }
     case "agregar-act": agregarItem({k:"act:"+id, concepto:"Activación "+modulo(id).nombre, valor:DB.config.precios.activacion, pago:"unico"}); render(); return;
