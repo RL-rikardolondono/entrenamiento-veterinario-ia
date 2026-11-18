@@ -8,17 +8,19 @@ import pg from 'pg';
 const APP = 'https://entrenamiento-veterinario-ia.skynetgenesis.com/';
 const WA = 'https://wa.me/573044375758?text=' + encodeURIComponent('Hola. Estoy probando Entrenamiento Veterinario-IA y quiero ayuda.');
 const REMITENTE = process.env.BREVO_REMITENTE || 'contacto@skynetgenesis.com';
-const fecha = f => new Date(String(f).slice(0, 10) + 'T12:00:00Z').toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const fecha = f => { const d = f instanceof Date ? new Date(Date.UTC(f.getFullYear(), f.getMonth(), f.getDate(), 12)) : new Date(String(f).slice(0, 10) + 'T12:00:00Z'); return isNaN(d) ? '' : d.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }); };   // la librería pg entrega las fechas como Date
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-function correo(c) {
+// c.dias llega como (prueba_hasta − hoy). La app cuenta el día de hoy (le quedan dias+1), así que se ajusta: 1 = hoy es el último día, 0 = terminó ayer.
+function correo(c0) {
+  const c = Object.assign({}, c0, { dias: c0.dias + 1 });
   const inst = !!c.institucion, nombre = (c.nombre || '').split(' ')[0] || (inst ? 'coordinador(a)' : 'colega');
   const quien = inst ? `<strong>${esc(c.institucion)}</strong>` : 'usted';
   const asunto = c.dias === 0 ? (inst ? `Terminó la prueba gratis de ${c.institucion}` : 'Terminó su prueba gratis de Entrenamiento Veterinario-IA')
     : c.dias === 1 ? 'Hoy es el último día de su prueba gratis'
     : `Le quedan ${c.dias} días de prueba gratis en Entrenamiento Veterinario-IA`;
   const intro = c.dias === 0
-    ? `La prueba gratis de ${quien} terminó hoy. <strong>Su progreso, puntos y gemas quedan guardados.</strong> ${inst ? 'Para que su equipo siga entrenando, active el plan en el Market con un solo pago en Bold: el acceso se abre apenas Bold confirma el pago.' : 'Para seguir, compre en el Market los módulos que quiera: cada uno da 12 meses de acceso. El caso de la semana sigue siendo gratis.'}`
+    ? `${inst ? 'La prueba gratis de ' + quien + ' terminó.' : 'Su prueba gratis terminó.'} <strong>Su progreso, puntos y gemas quedan guardados.</strong> ${inst ? 'Para que su equipo siga entrenando, active el plan en el Market con un solo pago en Bold: el acceso se abre apenas Bold confirma el pago.' : 'Para seguir, compre en el Market los módulos que quiera: cada uno da 12 meses de acceso. El caso de la semana sigue siendo gratis.'}`
     : c.dias === 1
       ? `Hoy es el último día de la prueba gratis de ${quien}. ${inst ? 'Si activa hoy el plan, su equipo sigue sin interrupciones y el resto del mes no se cobra.' : 'Aproveche para terminar los casos que tiene abiertos.'}`
       : `${inst ? 'A ' + quien + ' le quedan' : 'Le quedan'} <strong>${c.dias} días</strong> de prueba gratis (hasta el ${fecha(c.prueba_hasta)}).`;
@@ -67,8 +69,10 @@ await db.connect();
 const CUPO = 280;   // Brevo gratis permite 300 correos al día
 let enviados = 0, fallas = 0;
 const pruebas = (await db.query('select * from public.pruebas_para_correo()')).rows;
+const DIAS_AVISO = [15, 8, 3, 1, 0];   // bienvenida, mitad, 3 días, último día y fin (no un correo diario)
 for (const c of pruebas) {
   if (enviados >= CUPO) break;
+  if (!DIAS_AVISO.includes(c.dias + 1)) continue;
   const { asunto, html } = correo(c);
   if (await enviar(c.email, c.nombre || c.institucion, asunto, html)) { if (process.env.PRUEBA !== '1') await db.query('select public.prueba_correo_enviado($1)', [c.clave]); enviados++; } else fallas++;
 }
