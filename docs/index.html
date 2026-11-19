@@ -2,7 +2,7 @@
 <meta name="description" content="Entrenamiento Veterinario-IA: simulador de casos clínicos veterinarios para médicos veterinarios, zootecnistas, auxiliares y estudiantes: pequeños animales, felinos, urgencias, bovinos, equinos, porcinos, aves y exóticos. Gamificado, con casos de la semana basados en estudios reales. SkyNet Genesis.">
 <meta name="theme-color" content="#1E3A4C"><meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%231E3A4C%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%23E0A21A%27/%3E%3C/svg%3E">
-<script src="config.js?v=022940"></script>
+<script src="config.js?v=047047"></script>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icono-192.png"><meta name="apple-mobile-web-app-capable" content="yes">
 <title>Entrenamiento Veterinario-IA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5840,7 +5840,7 @@ function clickExtra(act, id, b, u){
     case "ed-agregar": { leerEditor(); const arr=obtenerRuta(EDIT.c, id); if(Array.isArray(arr)&&arr.length){ const n=JSON.parse(JSON.stringify(arr[arr.length-1])); if(n&&typeof n==="object"&&"id" in n) n.id=String(n.id)+"_n"+arr.length; arr.push(n); render(); } return true; }
     case "ca-buscar": ir("admin-cuentas",{q:val("ca-q")}); return true;
     case "ca-csv": { const L=REAL()?(CUENTAS||[]):DB.usuarios.map(u=>({nombre:u.nombre, correo:u.correo, tipo:u.tipo, entidad:u.entidadId&&entidad(u.entidadId)?entidad(u.entidadId).nombre:"", creado:u.creado}));
-      descargar("cuentas-"+hoy()+".csv", csv([["Nombre","Correo","Perfil","Institución","Creada","Último ingreso","Bloqueo"]].concat(L.map(x=>[x.nombre,x.correo,x.tipo,x.entidad||"",x.creado||"",x.ultimo||"",x.bloqueo||""]))), "text/csv;charset=utf-8"); return true; }
+      descargar("cuentas-"+hoy()+".csv", csv([["Nombre","Correo","Perfil","Institución","Creada","Último ingreso","Bloqueo"]].concat(L.map(x=>[x.nombre,x.correo,x.tipo,x.entidad||"",x.creado||"",x.ultimo||"",x.bloqueo||""])).concat([[],["Generado por "+APP.nombre+" · SkyNet Genesis · "+SG.correo+" · WhatsApp "+SG.waTxt]])), "text/csv;charset=utf-8"); return true; }
     case "ca-bloquear": abrirModal(`${cabModal("Bloquear cuenta")}<p>${esc(id)}</p><label class="campo" for="ca-mot">Motivo (lo verá la persona)<input type="text" id="ca-mot" maxlength="300"></label><div class="row"><button class="btn peligro" data-act="ca-bloquear-si" data-id="${esc(id)}">Bloquear</button><button class="btn sec" data-act="cerrar-modal">Cancelar</button></div>`); return true;
     case "ca-bloquear-si": { const m=val("ca-mot"); if(m.length<5){ toast("Escriba el motivo."); return true; } cerrarModal(); bloquearCuenta(id, m); return true; }
     case "ca-desbloquear": bloquearCuenta(id, null); return true;
@@ -5848,7 +5848,7 @@ function clickExtra(act, id, b, u){
     case "interna-si": { const m=val("in-mot"); if(m.length<5){ toast("Escriba el motivo."); return true; } cerrarModal(); marcarInterna(id, b.dataset.si==="1", m); return true; }
     case "fact-marcar": abrirModal(`${cabModal("Registrar factura")}<label class="campo" for="fm-num">Número de la factura emitida<input type="text" id="fm-num" maxlength="40"></label><div class="row"><button class="btn verde" data-act="fact-marcar-si" data-id="${esc(id)}">Guardar</button><button class="btn sec" data-act="cerrar-modal">Cancelar</button></div>`); return true;
     case "fact-marcar-si": { const n=val("fm-num"); cerrarModal(); if(REAL()) accionReal("adm_factura_marcar",{p_pago:+id, p_numero:n},"Factura registrada."); return true; }
-    case "fact-csv": descargar("facturas-"+hoy()+".csv", csv([["Pago","Fecha","Tipo doc.","Número","Nombre","Correo","Dirección","Municipio","Total","Conceptos","Estado","Factura"]].concat((DB.facturas||[]).map(f=>{ const x=f.factura||{}; return [f.pago,f.fecha,x.tipoDoc,x.num,x.nombre,x.email,x.direccion||"",x.municipio||"",f.total,(f.items||[]).map(i=>i.concepto).join(" + "),f.estado,f.numero||""]; }))), "text/csv;charset=utf-8"); return true;
+    case "fact-csv": descargar("facturas-"+hoy()+".csv", csv([["Pago","Fecha","Tipo doc.","Número","Nombre","Correo","Dirección","Municipio","Total","Conceptos","Estado","Factura"]].concat((DB.facturas||[]).map(f=>{ const x=f.factura||{}; return [f.pago,f.fecha,x.tipoDoc,x.num,x.nombre,x.email,x.direccion||"",x.municipio||"",f.total,(f.items||[]).map(i=>i.concepto).join(" + "),f.estado,f.numero||""]; })).concat([[],["Generado por "+APP.nombre+" · SkyNet Genesis · "+SG.correo+" · WhatsApp "+SG.waTxt]])), "text/csv;charset=utf-8"); return true;
   }
   return false;
 }
